@@ -18,6 +18,11 @@ class BooksController extends Controller
         return response()->json($books, 200);
     }
 
+    public function getBooks(){
+        $books = DB::select("SELECT id, title FROM books");
+        return response()->json(['data' => $books], 200);
+    }
+
     public function store(Request $request)
     {
         

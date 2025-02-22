@@ -23,6 +23,7 @@ Route::post('/refresh', [AuthController::class, 'refreshToken']);
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('/get-books', [BooksController::class, 'getBooks']);
     Route::get('/books', [BooksController::class, 'index']);
     Route::post('/books', [BooksController::class, 'store']);
     Route::get('/books/{id}', [BooksController::class, 'show']);

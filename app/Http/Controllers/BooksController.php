@@ -12,9 +12,29 @@ use App\Models\Books;
 
 class BooksController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = DB::select("SELECT * FROM books");
+        $page = intval($request->query('page', 1));
+        $limit = intval($request->query('limit', 5));
+        $offset = ($page - 1) * $limit;
+        $keyword = $request->query('search', ''); 
+
+        
+        $sql = sprintf("
+            SELECT id, title, author, description, year, stock   
+            FROM books
+            WHERE title LIKE ? 
+            OR author LIKE ? 
+            OR description LIKE ? 
+            OR year LIKE ?
+            OR stock LIKE ?  
+            LIMIT %d OFFSET %d
+        ", $limit, $offset);
+
+        
+        $books = DB::select($sql, ["%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%", "%$keyword%"]);
+
+        
         return response()->json($books, 200);
     }
 
@@ -43,7 +63,7 @@ class BooksController extends Controller
         }
 
         
-        DB::insert("INSERT INTO books (title, author, description, year, stock, created_at, updated_at) VALUES (?, ?, ?, ?, ?, NOW(), NOW())", [
+        DB::insert("INSERT INTO books (title, author, description, year, stock, created_at) VALUES (?, ?, ?, ?, ?, NOW())", [
             $request->title, 
             $request->author, 
             $request->description,

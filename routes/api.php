@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::delete('/books/{id}', [BooksController::class, 'destroy']);
 
     Route::get('/borrows', [BorrowsController::class, 'index']);
+    Route::get('/borrows-history', [BorrowsController::class, 'getBorrowingHistory']);
     Route::post('/borrows', [BorrowsController::class, 'store']);
     Route::put('/borrows/{id}', [BorrowsController::class, 'update']);
     Route::delete('/borrows/{id}', [BorrowsController::class, 'destroy']);
